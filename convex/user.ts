@@ -30,8 +30,6 @@ export const createUser = mutation({
       lastUpdated: Date.now(),
       votedYes: false,
     });
-
-    return userId;
   },
 });
 

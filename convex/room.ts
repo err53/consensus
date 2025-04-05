@@ -53,8 +53,6 @@ export const createRoom = mutation({
       roomId: room,
       lastUpdated: Date.now(),
     });
-
-    return code;
   },
 });
 
@@ -82,8 +80,6 @@ export const joinRoom = mutation({
       roomId: room._id,
       lastUpdated: Date.now(),
     });
-
-    return room.code;
   },
 });
 
@@ -176,8 +172,6 @@ export const regenerateRoomCode = mutation({
       code: newCode,
       lastUpdated: Date.now(),
     });
-
-    return newCode;
   },
 });
 
