@@ -34,9 +34,18 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { MoreHorizontal, UserX, RefreshCw, Check, X } from "lucide-react";
+import {
+  MoreHorizontal,
+  UserX,
+  RefreshCw,
+  Check,
+  X,
+  Copy,
+  ClipboardCheck,
+} from "lucide-react";
 import { Id } from "../convex/_generated/dataModel";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 const roomCodeSchema = z.object({
   code: z
@@ -71,6 +80,7 @@ export const Room = () => {
   const [isRegeneratingCode, setIsRegeneratingCode] = useState(false);
   const [previousMajority, setPreviousMajority] = useState(false);
   const [showMajorityAlert, setShowMajorityAlert] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
 
   const roomForm = useForm<z.infer<typeof roomCodeSchema>>({
     resolver: zodResolver(roomCodeSchema),
@@ -163,6 +173,21 @@ export const Room = () => {
       toast.error(error.message || "Failed to remove user");
     } finally {
       setIsDeletingUser(false);
+    }
+  };
+
+  const handleCopyCode = () => {
+    if (room?.code) {
+      navigator.clipboard
+        .writeText(room.code)
+        .then(() => {
+          setIsCopied(true);
+          toast.success("Room code copied to clipboard");
+          setTimeout(() => setIsCopied(false), 2000);
+        })
+        .catch(() => {
+          toast.error("Failed to copy code");
+        });
     }
   };
 
@@ -339,7 +364,7 @@ export const Room = () => {
           <CardDescription>Invite others with your room code</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-center justify-center p-3 sm:p-4 bg-muted rounded-md">
+          <div className="flex items-center justify-center p-3 sm:p-4 bg-muted rounded-md relative">
             <div className="text-center">
               <p className="text-2xl sm:text-3xl font-bold tracking-wider">
                 {room?.code}
@@ -348,6 +373,19 @@ export const Room = () => {
                 Share this code with others to join
               </p>
             </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute right-2 top-2 h-8 w-8"
+              onClick={handleCopyCode}
+              title="Copy code"
+            >
+              {isCopied ? (
+                <ClipboardCheck className="h-4 w-4 text-green-600" />
+              ) : (
+                <Copy className="h-4 w-4" />
+              )}
+            </Button>
           </div>
 
           <div className="space-y-2">
@@ -363,9 +401,15 @@ export const Room = () => {
                       className="p-2 sm:p-3 flex items-center justify-between"
                     >
                       <div className="flex items-center gap-2">
-                        <div className="h-6 w-6 rounded-full flex items-center justify-center bg-primary text-primary-foreground text-xs font-medium">
-                          {roomUser.name.substring(0, 2).toUpperCase()}
-                        </div>
+                        <Avatar className="h-6 w-6">
+                          <AvatarImage
+                            src={`https://api.dicebear.com/7.x/initials/svg?seed=${roomUser.name}`}
+                            alt={roomUser.name}
+                          />
+                          <AvatarFallback className="text-xs">
+                            {roomUser.name.substring(0, 2).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
                         <span className="text-sm sm:text-base">
                           {roomUser.name}
                         </span>
