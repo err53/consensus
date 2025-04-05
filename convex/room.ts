@@ -95,7 +95,7 @@ export const roomInfo = async (ctx: QueryCtx, roomId: Id<"rooms">) => {
 
   const usersInRoom = await ctx.db
     .query("users")
-    .filter((q) => q.eq(q.field("roomId"), roomId))
+    .withIndex("by_roomId", (q) => q.eq("roomId", roomId))
     .collect();
 
   const votes = usersInRoom
@@ -126,7 +126,7 @@ export const deleteUserFromRoom = mutation({
 
     const roomUsers = await ctx.db
       .query("users")
-      .filter((q) => q.eq(q.field("roomId"), user?.roomId))
+      .withIndex("by_roomId", (q) => q.eq("roomId", user?.roomId))
       .collect();
 
     // make sure that calling user is the host
@@ -200,7 +200,7 @@ export const leaveRoom = mutation({
     // if there are no users in the room, delete the room
     const usersInRoom = await ctx.db
       .query("users")
-      .filter((q) => q.eq(q.field("roomId"), user.roomId))
+      .withIndex("by_roomId", (q) => q.eq("roomId", user.roomId))
       .collect();
     if (usersInRoom.length === 0 && user.roomId) {
       await ctx.db.delete(user.roomId);

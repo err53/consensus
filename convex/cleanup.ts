@@ -43,7 +43,7 @@ export const cleanupStaleUsers = internalMutation({
     for (const roomId of roomsToCheck) {
       const usersInRoom = await ctx.db
         .query("users")
-        .filter((q) => q.eq(q.field("roomId"), roomId))
+        .withIndex("by_roomId", (q) => q.eq("roomId", roomId))
         .first();
 
       // If no users are in this room anymore, delete it

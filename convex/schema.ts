@@ -18,5 +18,5 @@ export default defineSchema({
     votedYes: v.boolean(),
 
     lastUpdated: v.number(),
-  }),
+  }).index("by_roomId", ["roomId"]),
 });
