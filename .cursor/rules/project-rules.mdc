@@ -1,0 +1,15 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+## Background
+
+- This app is a super simple anonymous voting app for groups.
+
+## Tooling
+
+- This app uses `NextJS` as the frontend layer, and `convex` for the backend layer.
+- `pnpm` is used instead of `npm.
+- Styling is done with `shadcn/ui`.
