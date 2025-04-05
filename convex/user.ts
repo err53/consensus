@@ -125,19 +125,3 @@ export const deleteUser = mutation({
     await ctx.db.delete(user._id);
   },
 });
-
-// Simple mutation to update the user's lastUpdated timestamp
-export const updateActivity = mutation({
-  args: {
-    ...SessionIdArg,
-  },
-  handler: async (ctx, args) => {
-    const user = await sessionToUser(ctx, args.sessionId);
-
-    if (user) {
-      await ctx.db.patch(user._id, {
-        lastUpdated: Date.now(),
-      });
-    }
-  },
-});
