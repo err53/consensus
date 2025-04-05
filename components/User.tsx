@@ -147,7 +147,7 @@ export const User = () => {
             <DialogHeader>
               <DialogTitle>Edit Profile</DialogTitle>
               <DialogDescription>
-                Change your name here. Click save when you're done.
+                Change your name here. Click save when you&apos;re done.
               </DialogDescription>
             </DialogHeader>
             <Form {...nameForm}>

@@ -20,14 +20,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "./ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -94,7 +87,7 @@ export const Room = () => {
     try {
       await createRoom();
       toast.success("Room created successfully");
-    } catch (error) {
+    } catch {
       toast.error("Failed to create room");
     } finally {
       setIsCreating(false);
@@ -105,7 +98,7 @@ export const Room = () => {
     try {
       await joinRoom({ code: values.code });
       toast.success(`Joined room ${values.code}`);
-    } catch (error) {
+    } catch {
       toast.error("Failed to join room. The room may not exist.");
     }
   };
@@ -115,7 +108,7 @@ export const Room = () => {
     try {
       await leaveRoom();
       toast.success("Left room successfully");
-    } catch (error) {
+    } catch {
       toast.error("Failed to leave room");
     } finally {
       setIsLeaving(false);
@@ -127,7 +120,7 @@ export const Room = () => {
     try {
       await vote({ votedYes: !user?.votedYes });
       toast.success(user?.votedYes ? "Vote removed" : "Vote recorded");
-    } catch (error) {
+    } catch {
       toast.error("Failed to update vote");
     } finally {
       setIsVoting(false);
@@ -148,8 +141,8 @@ export const Room = () => {
     try {
       await regenerateRoomCode();
       toast.success(`Room code regenerated`);
-    } catch (error: any) {
-      toast.error(error.message || "Failed to regenerate room code");
+    } catch {
+      toast.error("Failed to regenerate room code");
     } finally {
       setIsRegeneratingCode(false);
     }
@@ -169,8 +162,8 @@ export const Room = () => {
     try {
       await deleteUserFromRoom({ targetUserId });
       toast.success("User removed from room");
-    } catch (error: any) {
-      toast.error(error.message || "Failed to remove user");
+    } catch {
+      toast.error("Failed to remove user");
     } finally {
       setIsDeletingUser(false);
     }
